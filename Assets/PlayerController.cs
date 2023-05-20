@@ -1,33 +1,33 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
     public float speed = 5f;
     public float jumpForce = 5f;
+    public float gravity = -9.8f;
     public Transform groundCheck;
-    public float groundDistance = 0.2f;
+    public float groundDistance = 0.5f;
     public LayerMask groundMask;
 
     private Rigidbody rb;
     private bool isGrounded;
+    private Vector3 velocity;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         CheckGrounded();
         Move();
         Jump();
+        ApplyGravity();
     }
 
     private void CheckGrounded()
     {
-        
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
     }
 
@@ -36,15 +36,20 @@ public class PlayerController : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
         Vector3 movement = transform.right * horizontalInput + transform.forward * verticalInput;
-        rb.MovePosition(rb.position + movement * speed * Time.fixedDeltaTime);
+        rb.MovePosition(rb.position + movement * speed * Time.deltaTime);
     }
 
     private void Jump()
     {
-        if (isGrounded && Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump") && isGrounded)
         {
-            Debug.Log("Puedo saltar");
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            velocity.y = Mathf.Sqrt(jumpForce * -2f * gravity);
         }
+    }
+
+    private void ApplyGravity()
+    {
+        velocity.y += gravity * Time.deltaTime;
+        rb.velocity = new Vector3(rb.velocity.x, velocity.y, rb.velocity.z);
     }
 }
