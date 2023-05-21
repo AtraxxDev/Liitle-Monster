@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float speed = 5f;
+    public float walkSpeed = 5f;
+    public float runSpeed = 10f;
     public float jumpForce = 5f;
     public float gravity = -9.81f;
     public Transform groundCheck;
@@ -28,6 +29,8 @@ public class PlayerController : MonoBehaviour
     {
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
+        bool isRunning = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+
         Vector3 movement = new Vector3(horizontalInput, 0f, verticalInput);
 
         // Rotación del personaje hacia la dirección de movimiento
@@ -35,6 +38,8 @@ public class PlayerController : MonoBehaviour
         {
             transform.rotation = Quaternion.LookRotation(movement);
         }
+
+        float speed = isRunning ? runSpeed : walkSpeed;
 
         velocity.x = movement.x * speed;
         velocity.z = movement.z * speed;
