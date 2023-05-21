@@ -29,6 +29,13 @@ public class PlayerController : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
         Vector3 movement = new Vector3(horizontalInput, 0f, verticalInput);
+
+        // Rotación del personaje hacia la dirección de movimiento
+        if (movement != Vector3.zero)
+        {
+            transform.rotation = Quaternion.LookRotation(movement);
+        }
+
         velocity.x = movement.x * speed;
         velocity.z = movement.z * speed;
         rb.velocity = velocity;
