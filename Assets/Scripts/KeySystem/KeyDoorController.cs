@@ -54,14 +54,14 @@ namespace Keysystem
 
         void OpenDoor()
         {
-            if (!doorAnim && !pauseInteraction)
+            if (!doorOpen && !pauseInteraction)
             {
                 doorAnim.Play(openAnimationName, 0, 0.0f);
                 doorOpen = true;
                 StartCoroutine(PauseDoorInteraction());
             }
 
-            else if (doorAnim && !pauseInteraction)
+            else if (doorOpen && !pauseInteraction)
             {
                 doorAnim.Play(closeAnimationName, 0, 0.0f);
                 doorOpen = false;
