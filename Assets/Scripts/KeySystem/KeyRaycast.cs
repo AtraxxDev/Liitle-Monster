@@ -20,8 +20,10 @@ namespace Keysystem
 
         private void Update()
         {
+           
             RaycastHit hit;
             Vector3 fwd = transform.TransformDirection(Vector3.forward);
+            Debug.DrawRay(transform.position, fwd, Color.blue);
 
             int mask = 1 << LayerMask.NameToLayer(exluseLayerName) | layerMaskInteract.value;
 

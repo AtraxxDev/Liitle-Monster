@@ -7,7 +7,8 @@ namespace Keysystem
     public class KeyDoorController : MonoBehaviour
     {
         private Animator doorAnim;
-        private bool doorOpen = false;
+        public bool doorOpen = false;
+
         [Header("Animation Names")]
         [SerializeField] private string openAnimationName = "Door Open";
         [SerializeField] private string closeAnimationName = "Door Close";
