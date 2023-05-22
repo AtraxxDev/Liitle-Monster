@@ -19,6 +19,11 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
+    private void FixedUpdate()
+    {
+        rb.velocity = velocity;
+    }
+
     private void Update()
     {
         Move();
@@ -43,7 +48,7 @@ public class PlayerController : MonoBehaviour
 
         velocity.x = movement.x * speed;
         velocity.z = movement.z * speed;
-        rb.velocity = velocity;
+        
     }
 
     private void Jump()
@@ -61,6 +66,6 @@ public class PlayerController : MonoBehaviour
         }
 
         velocity.y += gravity * Time.deltaTime; // Aplica la gravedad
-        rb.velocity = velocity;
+        //rb.velocity = velocity;
     }
 }
