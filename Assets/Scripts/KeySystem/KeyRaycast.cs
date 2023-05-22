@@ -13,13 +13,20 @@ namespace Keysystem
         private KeyItemController raycastedObject;
         private NoteController _noteController;
         [SerializeField] private KeyCode openDoorKey = KeyCode.Mouse0;
-        [SerializeField] private KeyCode interactNoteKey = KeyCode.Mouse0;
-        [SerializeField] private Image crosshair = null;
+
+        [Space (10)]
+        [Header("UI Image")]
+        [SerializeField] private GameObject KeyInteract = null;
+        [SerializeField] private GameObject TextDoor = null;
+        [SerializeField] private GameObject TextNote = null;
+
+
+
         private bool isCrosshairActive;
         private bool doOnce;
 
         private string interactableTag = "InteractiveObject";
-        private string noteTag = "Note";
+        
 
         private void Update()
         {
@@ -38,10 +45,13 @@ namespace Keysystem
                 {
 
                     _noteController = readbleItem;
-
+                    CrosshairChange(true);
+                    TextNote.SetActive(true);
                 }
+
                 else
                 {
+                    
                     ClearNote();
                 }
 
@@ -51,6 +61,7 @@ namespace Keysystem
 
                 if (hit.collider.CompareTag(interactableTag)) 
                 {
+                    
 
                     if (!doOnce)
                     {
@@ -58,8 +69,10 @@ namespace Keysystem
                         raycastedObject = hit.collider.gameObject.GetComponent<KeyItemController>();
                            
                         CrosshairChange(true);
+                        TextDoor.SetActive(true);
 
                     }
+                    
                     isCrosshairActive = true;
                     doOnce = true;
 
@@ -78,7 +91,8 @@ namespace Keysystem
 
             else
             {
-               
+                TextNote.SetActive(false);
+                TextDoor.SetActive(false);   
                 ClearNote() ;
 
                 if (isCrosshairActive) 
@@ -115,13 +129,12 @@ namespace Keysystem
         void CrosshairChange(bool on)
         {
             if (on && !doOnce) 
-            { 
-                crosshair.color = Color.red;
+            {
+                KeyInteract.SetActive(true);
             }
             else
             {
-                crosshair.color= Color.white;
-                isCrosshairActive= false;
+                KeyInteract.SetActive(false);
             }
         }
     }
