@@ -36,6 +36,10 @@ public class PullObject : MonoBehaviour
         {
             var step = pullSpeed * Time.deltaTime;
             hookedObject.transform.position = Vector3.MoveTowards(hookedObject.transform.position,gunTip.transform.position,step);
+            if(hookedObject.transform.position==gunTip.transform.position)
+            {
+                hookedObject = null;
+            }
         }
     }
 
