@@ -9,6 +9,7 @@ public class GrapplingHook : MonoBehaviour
     private Vector3 grapplePoint;
     public LayerMask whatIsGrappleable;
     public Transform gunTip, camera;
+    private float maxDistance = 100f;
 
     private void Awake()
     {
@@ -29,7 +30,11 @@ public class GrapplingHook : MonoBehaviour
 
     void StartGrapple()
     {
-
+        RaycastHit hit;
+        if(Physics.Raycast(origin: camera.position,direction:camera.forward,out hit,maxDistance))
+        {
+            grapplePoint = hit.point;
+        }
     }
 
     void StopGrapple()
