@@ -22,7 +22,7 @@ public class PullObject : MonoBehaviour
 
     private void Update()
     {
-
+        RaycastTeST();
         if (Input.GetMouseButtonDown(0))
         {
             StartGrapple();
@@ -47,14 +47,18 @@ public class PullObject : MonoBehaviour
     void StartGrapple()
     {
         RaycastHit hit;
-        if (Physics.Raycast(gunTip.position, Vector3.forward, out hit, maxDistance, whatIsGrappleable))
+        Vector3 forward = gunTip.TransformDirection(Vector3.forward) * 10;
+        if (Physics.Raycast(gunTip.position, forward, out hit, maxDistance, whatIsGrappleable))
         {
             Debug.Log("Le di");
+          
+            Debug.DrawRay(transform.position, forward, Color.green);
             hookedObject = hit.transform.gameObject;
-           /* grapplePoint = hit.point;
+            grapplePoint = hit.point;
             joint = player.gameObject.AddComponent<SpringJoint>();
             joint.autoConfigureConnectedAnchor = false;
             joint.connectedAnchor = grapplePoint;
+
 
             float distanceFromPoint = Vector3.Distance(player.position, grapplePoint);
 
@@ -62,7 +66,7 @@ public class PullObject : MonoBehaviour
             joint.maxDistance = distanceFromPoint * 0.8f;
             joint.minDistance = distanceFromPoint * 0.25f;
 
-            //GameplayChanges
+            /*//GameplayChanges
             joint.spring = 4.5f;
             joint.damper = 7f;
             joint.massScale = 4.5f;*/
@@ -70,8 +74,25 @@ public class PullObject : MonoBehaviour
             lr.positionCount = 2;
             currentGrapplePosition = grapplePoint;
         }
+      
     }
 
+    void RaycastTeST()
+    {
+        RaycastHit hit;
+        Vector3 forward = gunTip.TransformDirection(Vector3.forward) * 10;
+        if (Physics.Raycast(gunTip.position, forward, out hit, maxDistance, whatIsGrappleable))
+        {
+            Debug.Log("Le di");
+            
+            Debug.DrawRay(transform.position, forward, Color.green);
+        }
+        else
+        {
+          
+            Debug.DrawRay(transform.position, forward, Color.red);
+        }
+    }
 
     private Vector3 currentGrapplePosition;
 
@@ -80,6 +101,7 @@ public class PullObject : MonoBehaviour
     {
         lr.positionCount = 0;
         Destroy(joint);
+        hookedObject = null;
     }
 
 
