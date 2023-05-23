@@ -14,6 +14,9 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded;
     private Vector3 velocity;
 
+    //Ivan add-on
+   // private Vector3 normalVector = Vector3.up;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -51,6 +54,10 @@ public class PlayerController : MonoBehaviour
         
     }
 
+    private void Look()
+    { 
+    }
+
     private void Jump()
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
@@ -62,10 +69,12 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
+            //rb.AddForce(Vector2.up * jumpForce * 1.5f);
+           // rb.AddForce(normalVector * jumpForce * 0.5f);
             velocity.y = Mathf.Sqrt(jumpForce * -2f * gravity); // Cálculo del salto
         }
 
-        velocity.y += gravity * Time.deltaTime; // Aplica la gravedad
+             velocity.y += gravity * Time.deltaTime; // Aplica la gravedad
         //rb.velocity = velocity;
     }
 }
