@@ -6,6 +6,7 @@ TagManager:
   tags:
   - InteractiveObject
   - Note
+  - PullableObjects
   layers:
   - Default
   - TransparentFX
