@@ -8,12 +8,14 @@ public class PullObject : MonoBehaviour
     private LineRenderer lr;
     private Vector3 grapplePoint;
     public LayerMask whatIsGrappleable;
+    public LayerMask whatIsNotGrappleable;
     public Transform gunTip, player;
     [SerializeField] private float maxDistance = 100f;
     private SpringJoint joint;
 
     [SerializeField] private float pullSpeed;
     private GameObject hookedObject;
+    private GameObject hookedWall;
 
     private void Awake()
     {
@@ -32,14 +34,31 @@ public class PullObject : MonoBehaviour
             StopGrapple();
         }
 
-        if(hookedObject!=null)
+        HookingBitches();
+        
+    }
+
+    void HookingBitches()
+    {
+        if (hookedObject != null&&hookedObject.CompareTag("PullableObjects"))
         {
             var step = pullSpeed * Time.deltaTime;
-            hookedObject.transform.position = Vector3.MoveTowards(hookedObject.transform.position,gunTip.transform.position,step);
-            if(hookedObject.transform.position==gunTip.transform.position)
-            {
-                hookedObject = null;
-            }
+            hookedObject.transform.position = Vector3.MoveTowards(hookedObject.transform.position, gunTip.transform.position, step);
+        }
+        else if (hookedWall != null&&hookedObject.CompareTag("Heavy"))
+        {
+            var step = pullSpeed * Time.deltaTime;
+            player.transform.position = Vector3.MoveTowards(player.transform.position, hookedObject.transform.position, step);
+        }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag=="PullableObjects")
+        {
+            Debug.Log("Yeah");
+            //hookedObject = null;
+            StopGrapple();
         }
     }
 
@@ -53,11 +72,10 @@ public class PullObject : MonoBehaviour
         RaycastHit hit;
         Vector3 forward = gunTip.TransformDirection(Vector3.forward) * 10;
         if (Physics.Raycast(gunTip.position, forward, out hit, maxDistance, whatIsGrappleable))
-        {
-            Debug.Log("Le di");
-          
+        {          
             Debug.DrawRay(transform.position, forward, Color.green);
             hookedObject = hit.transform.gameObject;
+            
             grapplePoint = hit.point;
             joint = player.gameObject.AddComponent<SpringJoint>();
             joint.autoConfigureConnectedAnchor = false;
@@ -70,15 +88,9 @@ public class PullObject : MonoBehaviour
             joint.maxDistance = distanceFromPoint * 0.8f;
             joint.minDistance = distanceFromPoint * 0.25f;
 
-            /*//GameplayChanges
-            joint.spring = 4.5f;
-            joint.damper = 7f;
-            joint.massScale = 4.5f;*/
-
             lr.positionCount = 2;
             currentGrapplePosition = grapplePoint;
-        }
-      
+        }     
     }
 
     void RaycastTeST()
@@ -87,7 +99,7 @@ public class PullObject : MonoBehaviour
         Vector3 forward = gunTip.TransformDirection(Vector3.forward) * 10;
         if (Physics.Raycast(gunTip.position, forward, out hit, maxDistance, whatIsGrappleable))
         {
-            Debug.Log("Le di");
+           // Debug.Log("Le di");
             
             Debug.DrawRay(transform.position, forward, Color.green);
         }
