@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     public float gravity = -9.81f;
     public Transform groundCheck;
     public float groundDistance = 0.2f;
+    public bool Freeze;
     public LayerMask groundMask;
 
     private Rigidbody rb;
@@ -31,6 +32,12 @@ public class PlayerController : MonoBehaviour
     {
         Move();
         Jump();
+
+        if(Freeze)
+        {
+            rb.velocity = Vector3.zero;
+        }
+
     }
 
     private void Move()
