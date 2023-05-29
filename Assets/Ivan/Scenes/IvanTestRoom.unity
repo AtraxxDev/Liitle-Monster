@@ -3108,10 +3108,15 @@ MonoBehaviour:
   whatIsGrappleable:
     serializedVersion: 2
     m_Bits: 256
+  whatIsNotGrappleable:
+    serializedVersion: 2
+    m_Bits: 512
   gunTip: {fileID: 1344218389}
   player: {fileID: 1248742132}
-  maxDistance: 100
+  maxDistance: 25
   pullSpeed: 5
+  grappleDelayTime: 0.25
+  grapplingCd: 1
 --- !u!1 &1651768370
 GameObject:
   m_ObjectHideFlags: 0
