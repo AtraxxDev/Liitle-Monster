@@ -11,13 +11,15 @@ public class PullObject : MonoBehaviour
     public LayerMask whatIsGrappleable;
     public LayerMask whatIsNotGrappleable;
     public Transform gunTip, player;
+    public GameObject Player;
     private PlayerController pc;
 
     [Header("Grappling")]
     [SerializeField] private float maxDistance = 100f;
     [SerializeField] private float pullSpeed;
-    [SerializeField] private float grappleDelayTime;
+    [SerializeField] private float overShootYAxis;
     
+
     [Header("Grappled")]
     private SpringJoint hookJoint;
     private GameObject hookedObject;
@@ -25,41 +27,30 @@ public class PullObject : MonoBehaviour
     [Header("Cooldown")]
     public float grapplingCd;
     private float grapplingCdTimer;
+    [SerializeField] private float grappleDelayTime;
 
     private void Awake()
     {
         lr = GetComponent<LineRenderer>();
-        pc = GetComponent<PlayerController>();
+        Player = GameObject.FindGameObjectWithTag("Player");
+        pc = Player.GetComponent<PlayerController>();
+
     }
 
     private void Update()
     {
         RaycastTeST();
+        
         if (Input.GetMouseButtonDown(0)) StartGrapple();
         else if (Input.GetMouseButtonUp(0)) StopGrapple();
 
         HookingBitches();
 
+        //Esto sirve para darle un Timer al jugador para que pueda volver a lanzar el GrappleHook
         if (grapplingCdTimer > 0)
             grapplingCdTimer -= Time.deltaTime;
         
           
-    }
-
-    
-    void HookingBitches()
-    {
-        if (hookedObject != null&&hookedObject.CompareTag("PullableObjects"))
-        {
-            var step = pullSpeed * Time.deltaTime;
-            hookedObject.transform.position = Vector3.MoveTowards(hookedObject.transform.position, gunTip.transform.position, step);
-        }
-
-        else if(hookedObject!=null&&hookedObject.CompareTag("Wall"))
-        {
-            //Invoke(nameof(ExecuteGrapple), grappleDelayTime);
-        }
-        
     }
 
     private void LateUpdate()
@@ -71,12 +62,26 @@ public class PullObject : MonoBehaviour
     }
 
 
+    void HookingBitches()
+    {
+        if (hookedObject != null&&hookedObject.CompareTag("PullableObjects"))
+        {
+            var step = pullSpeed * Time.deltaTime;
+            hookedObject.transform.position = Vector3.MoveTowards(hookedObject.transform.position, gunTip.transform.position, step);
+        }
+
+        else if(hookedObject!=null&&hookedObject.CompareTag("Heavy"))
+        {
+            Invoke(nameof(ExecuteGrapple), grappleDelayTime);
+        }
+        
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.tag=="PullableObjects")
         {
             Debug.Log("Yeah");
-            //hookedObject = null;
             StopGrapple();
         }
     }
@@ -85,15 +90,16 @@ public class PullObject : MonoBehaviour
 
     void StartGrapple()
     {
-        if (grapplingCdTimer > 0) return;
+        if (grapplingCdTimer > 0) return; //Si el cooldown esta activo no se puede hacer Grappler 
 
         pc.Freeze = true;
+    
 
         RaycastHit hit;
         Vector3 forward = gunTip.TransformDirection(Vector3.forward) * 10;
         if (Physics.Raycast(gunTip.position, forward, out hit, maxDistance, whatIsGrappleable))
         {          
-            Debug.DrawRay(transform.position, forward, Color.green);
+           // Debug.DrawRay(transform.position, forward, Color.green);
             hookedObject = hit.transform.gameObject;
             
             grapplePoint = hit.point;
@@ -115,7 +121,7 @@ public class PullObject : MonoBehaviour
         }    
         else
         {
-            grapplePoint = gunTip.position + forward * maxDistance;
+            grapplePoint = gunTip.position + gunTip.forward * maxDistance;
 
             Invoke(nameof(StopGrapple), grappleDelayTime);
         }
@@ -125,6 +131,17 @@ public class PullObject : MonoBehaviour
     void ExecuteGrapple()
     {
         pc.Freeze = false;
+
+        Vector3 lowestPoint = new Vector3(Player.transform.position.x, transform.position.y - 1f, transform.position.z);
+
+        float grapplePointRelativeYPos = grapplePoint.y - lowestPoint.y;
+        float highestPointOnArc = grapplePointRelativeYPos + overShootYAxis;
+
+        if (grapplePointRelativeYPos < 0) highestPointOnArc = overShootYAxis;
+
+        pc.JumpToBitches(grapplePoint, highestPointOnArc);
+
+        Invoke(nameof(StopGrapple), 1f);
     }
 
    
@@ -151,17 +168,17 @@ public class PullObject : MonoBehaviour
     private Vector3 currentGrapplePosition;
 
     //Stop right there
-    void StopGrapple()
+    public void StopGrapple()
     {
 
         lr.positionCount = 0;
         Destroy(hookJoint);
         hookedObject = null;
+        
         pc.Freeze = false;
 
         grapplingCdTimer = grapplingCd;
     }
-
 
     void DrawRope()
     {

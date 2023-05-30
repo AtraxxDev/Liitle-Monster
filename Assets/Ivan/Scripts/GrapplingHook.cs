@@ -33,7 +33,7 @@ public class GrapplingHook : MonoBehaviour
         DrawRope();
     }
 
-    void StartGrapple()
+    public void StartGrapple()
     {
         RaycastHit hit;
         if(Physics.Raycast(camera.position,camera.forward,out hit,maxDistance,whatIsGrappleable))
@@ -64,7 +64,7 @@ public class GrapplingHook : MonoBehaviour
     private Vector3 currentGrapplePosition;
 
     //Stop right there
-    void StopGrapple()
+    public void StopGrapple()
     {
         lr.positionCount = 0;
         Destroy(joint);
