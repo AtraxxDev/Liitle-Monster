@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.06586173, g: 0.05718948, b: 0.03602396, a: 1}
+  m_IndirectSpecularColor: {r: 0.065861665, g: 0.057189457, b: 0.036023956, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2061,7 +2061,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1248742127}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: f9ab0ae2230a7fe4fb9cdbe6f31ce592, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5
@@ -2126,7 +2126,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1248742127}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -15.66, y: 1.8, z: -62.94}
+  m_LocalPosition: {x: -15.66, y: 3.6299996, z: -62.94}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3120,7 +3120,7 @@ MonoBehaviour:
   Player: {fileID: 0}
   maxDistance: 25
   pullSpeed: 5
-  overShootYAxis: 2
+  overShootYAxis: 1
   grapplingCd: 1
   grappleDelayTime: 0.25
 --- !u!1 &1651768370
@@ -4070,7 +4070,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1903836616}
   m_LocalRotation: {x: 0.03927512, y: -0, z: -0, w: 0.9992285}
-  m_LocalPosition: {x: -16, y: 3.77, z: -66.74}
+  m_LocalPosition: {x: -16, y: 5.6, z: -66.74}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -30,14 +30,15 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rb.velocity = velocity;
+        if (!ActiveGrapple)
+          rb.velocity = velocity;
     }
 
     private void Update()
     {
         
         Move();
-        Jump2();
+        Jump();
 
         if(Freeze)
         {
@@ -102,7 +103,7 @@ public class PlayerController : MonoBehaviour
         }
 
         velocity.y += gravity * Time.deltaTime; // Aplica la gravedad
-        rb.velocity = velocity;
+        
     }
 
     private void Jump2()
@@ -146,7 +147,7 @@ public class PlayerController : MonoBehaviour
     private void SetVelocity()
     {
         enableMovementOnNextTouch = true;
-        rb.velocity = velocityToSet;
+        rb.velocity = velocityToSet*2;
     }
 
     public Vector3 CalculateJumpVelocity(Vector3 startPoint, Vector3 endPoint, float trajectoryHeight)
