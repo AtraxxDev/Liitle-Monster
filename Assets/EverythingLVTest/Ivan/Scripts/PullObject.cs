@@ -12,7 +12,7 @@ public class PullObject : MonoBehaviour
     public LayerMask whatIsNotGrappleable;
     public Transform gunTip, player;
     public GameObject Player;
-    private PlayerController pc;
+    private PlayerController2 pc;
 
     [Header("Grappling")]
     [SerializeField] private float maxDistance = 100f;
@@ -33,7 +33,7 @@ public class PullObject : MonoBehaviour
     {
         lr = GetComponent<LineRenderer>();
         Player = GameObject.FindGameObjectWithTag("Player");
-        pc = Player.GetComponent<PlayerController>();
+        pc = Player.GetComponent<PlayerController2>();
 
     }
 
