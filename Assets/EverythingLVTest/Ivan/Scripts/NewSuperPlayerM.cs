@@ -26,6 +26,8 @@ public class NewSuperPlayerM : MonoBehaviour
     [Header("PullSutff")]
     public bool Freeze;
     public bool ActiveGrapple;
+    public GameObject Arm;
+    PullObject Pull;
 
 
     public Transform orientation;
@@ -41,6 +43,7 @@ public class NewSuperPlayerM : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        Pull = Arm.GetComponent<PullObject>();
         rb.freezeRotation = true;
         readyToJump = true;
         normalSpeed = moveSpeed;
@@ -99,7 +102,7 @@ public class NewSuperPlayerM : MonoBehaviour
             enableMovementOnNextTouch = false;
             ResetRestrictions();
 
-            GetComponent<PullObject>().StopGrapple();
+            Pull.GetComponent<PullObject>().StopGrapple();
         }
     }
 
