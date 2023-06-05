@@ -6,6 +6,7 @@ public class NewSuperPlayerM : MonoBehaviour
 {
     [Header("Movement")]
     public float moveSpeed;
+    public float normalSpeed;
     public float groundDrag;
 
     public float jumpForce;
@@ -20,6 +21,12 @@ public class NewSuperPlayerM : MonoBehaviour
     public float playerHeight;
     public LayerMask whatIsGround;
     bool grounded;
+
+
+    [Header("PullSutff")]
+    public bool Freeze;
+    public bool ActiveGrapple;
+
 
     public Transform orientation;
     public GameObject fix;
@@ -36,6 +43,7 @@ public class NewSuperPlayerM : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         readyToJump = true;
+        normalSpeed = moveSpeed;
     }
 
     private void Update()
@@ -49,10 +57,19 @@ public class NewSuperPlayerM : MonoBehaviour
         MyInput();
 
         //handle drag
-        if (grounded==true)
+        if (grounded&&!ActiveGrapple)
             rb.drag = groundDrag;
         else
             rb.drag = 0;
+
+        if(Freeze)
+        {
+            //moveSpeed = 0;
+            rb.velocity = Vector3.zero;
+        }
+
+        
+
     }
 
     private void FixedUpdate()
@@ -75,8 +92,26 @@ public class NewSuperPlayerM : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (enableMovementOnNextTouch)
+        {
+            enableMovementOnNextTouch = false;
+            ResetRestrictions();
+
+            GetComponent<PullObject>().StopGrapple();
+        }
+    }
+
+    public void ResetRestrictions()
+    {
+        ActiveGrapple = false;
+    }
+
     private void MovePlayer()
     {
+        if (ActiveGrapple) return;
+
         //Dirección xd
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
@@ -91,6 +126,8 @@ public class NewSuperPlayerM : MonoBehaviour
 
     private void SpeedControl()
     {
+        if (ActiveGrapple) return;
+
         Vector3 flatvel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
         //limit velocity if needed
@@ -119,7 +156,7 @@ public class NewSuperPlayerM : MonoBehaviour
         
         if (Physics.Raycast(fix.transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround))
         {
-            Debug.Log("Le di");
+            //Debug.Log("Le di");
             grounded=true;
             Debug.DrawRay(fix.transform.position, Vector3.down, Color.green);
         }
@@ -128,5 +165,38 @@ public class NewSuperPlayerM : MonoBehaviour
             grounded = false;
             Debug.DrawRay(fix.transform.position, Vector3.down, Color.red);
         }
+    }
+
+    public bool enableMovementOnNextTouch;
+
+    public void JumpToBitches(Vector3 targetPosition, float trajectoryHeight)
+    {
+        ActiveGrapple = true;
+
+        velocityToSet = CalculateJumpVelocity(transform.position, targetPosition, trajectoryHeight);
+        Invoke(nameof(SetVelocity), 0.1f); //La Velocidad se aplica después de 0.1 segundos
+
+        Invoke(nameof(ResetRestrictions), 3f);
+    }
+
+    private Vector3 velocityToSet;
+
+    private void SetVelocity()
+    {
+        if (!Application.isPlaying) return;
+        enableMovementOnNextTouch = true;
+        rb.velocity = velocityToSet;
+    }
+
+    public Vector3 CalculateJumpVelocity(Vector3 startPoint, Vector3 endPoint, float trajectoryHeight)
+    {
+        float gravity = Physics.gravity.y;
+        float displacementY = endPoint.y - startPoint.y;
+        Vector3 displacementXZ = new Vector3(endPoint.x - startPoint.x, 0f, endPoint.z - startPoint.z);
+
+        Vector3 velocityY = Vector3.up * Mathf.Sqrt(-2 * gravity * trajectoryHeight);
+        Vector3 velocityXZ = displacementXZ / (Mathf.Sqrt(-2 * trajectoryHeight / gravity) + Mathf.Sqrt(2 * (displacementY - trajectoryHeight) / gravity));
+
+        return velocityXZ + velocityY;
     }
 }
