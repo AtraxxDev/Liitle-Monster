@@ -50,7 +50,7 @@ public class NewSuperPlayerM : MonoBehaviour
         animator = GetComponent<Animator>();
         animator.SetBool("Idle", true); // Inicia la animación de idle
 
-       // Player = GameObject.FindGameObjectWithTag("ModelPlayer");
+        //Player = GameObject.FindGameObjectWithTag("ModelPlayer");
         //anim = Player.GetComponent<Animator>();
 
 
