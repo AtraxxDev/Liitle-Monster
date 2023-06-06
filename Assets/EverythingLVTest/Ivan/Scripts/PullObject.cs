@@ -36,7 +36,6 @@ public class PullObject : MonoBehaviour
     {
         lr = GetComponent<LineRenderer>();
         Player = GameObject.FindGameObjectWithTag("Player");
-        //pc = Player.GetComponent<PlayerController2>();
         tp = Player.GetComponent<NewSuperPlayerM>();
 
     }

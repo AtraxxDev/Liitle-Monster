@@ -8,6 +8,7 @@ TagManager:
   - Note
   - PullableObjects
   - Heavy
+  - ModelPlayer
   layers:
   - Default
   - TransparentFX
