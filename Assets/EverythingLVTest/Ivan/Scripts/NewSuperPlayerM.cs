@@ -34,7 +34,7 @@ public class NewSuperPlayerM : MonoBehaviour
     Vector3 moveDirection;
 
     Rigidbody rb;
-    Animator animator;
+    //Animator animator;
 
     public GameObject Player;
     public Animator anim;
@@ -47,11 +47,11 @@ public class NewSuperPlayerM : MonoBehaviour
         readyToJump = true;
 
 
-        animator = GetComponent<Animator>();
-        animator.SetBool("Idle", true); // Inicia la animación de idle
+        //animator = GetComponent<Animator>();
+        //animator.SetBool("Idle", true); // Inicia la animación de idle
 
-        //Player = GameObject.FindGameObjectWithTag("ModelPlayer");
-        //anim = Player.GetComponent<Animator>();
+        Player = GameObject.FindGameObjectWithTag("ModelPlayer");
+        anim = Player.GetComponent<Animator>();
 
 
     }
@@ -77,9 +77,9 @@ public class NewSuperPlayerM : MonoBehaviour
 
 
         if(ActiveGrapple)
-            anim.SetBool("Grappling", true);
+            anim.SetBool("IsGrappling", true);
         else
-            anim.SetBool("Grappling", false);
+            anim.SetBool("IsGrappling", false);
 
        /* if (rb.velocity!=Vector3.zero&&grounded)
         {
@@ -153,21 +153,21 @@ public class NewSuperPlayerM : MonoBehaviour
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
             if (moveDirection != Vector3.zero)
             {
-                animator.SetBool("Idle", false); // Deja de reproducir la animación de idle
-                animator.SetBool("Walk", true); // Reproduce la animación de walk
+                //anim.SetBool("Idle", false); // Deja de reproducir la animación de idle
+                anim.SetBool("IsWalking", true); // Reproduce la animación de walk
             }
             else
             {
-                animator.SetBool("Walk", false); // Deja de reproducir la animación de walk
-                animator.SetBool("Idle", true); // Reproduce la animación de idle
+                anim.SetBool("IsWalking", false); // Deja de reproducir la animación de walk
+                anim.SetBool("Idle", true); // Reproduce la animación de idle
             }
         }
         // En el aire
         else if (!grounded)
         {
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
-            animator.SetBool("Idle", false); // Deja de reproducir la animación de idle
-            animator.SetBool("Walk", false); // Deja de reproducir la animación de walk
+            anim.SetBool("Idle", false); // Deja de reproducir la animación de idle
+            anim.SetBool("IsWalking", false); // Deja de reproducir la animación de walk
         }
 
         //En el Suelo
@@ -207,14 +207,14 @@ public class NewSuperPlayerM : MonoBehaviour
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
 
-        animator.SetBool("Jump", true); // Reproduce la animación de jump
+        anim.SetBool("IsJumping", true); // Reproduce la animación de jump
 
     }
 
     private void ResetJump()
     {
         readyToJump = true;
-        animator.SetBool("Jump", false); // Deja de reproducir la animación de jump
+        anim.SetBool("IsJumping", false); // Deja de reproducir la animación de jump
     }
 
     void RaycastTeST()
