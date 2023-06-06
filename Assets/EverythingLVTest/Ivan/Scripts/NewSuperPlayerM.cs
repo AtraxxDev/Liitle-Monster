@@ -7,7 +7,6 @@ public class NewSuperPlayerM : MonoBehaviour
     [Header("Movement")]
     public float moveSpeed;
     public float groundDrag;
-
     public float jumpForce;
     public float jumpCooldown;
     public float airMultiplier;
@@ -21,23 +20,21 @@ public class NewSuperPlayerM : MonoBehaviour
     public LayerMask whatIsGround;
     bool grounded;
 
-
-    [Header("PullSutff")]
+    [Header("PullStuff")]
     public bool Freeze;
     public bool ActiveGrapple;
     public GameObject Arm;
     PullObject Pull;
-
 
     public Transform orientation;
     public GameObject fix;
 
     float horizontalInput;
     float verticalInput;
-
     Vector3 moveDirection;
 
     Rigidbody rb;
+    Animator animator;
 
     private void Start()
     {
@@ -45,32 +42,29 @@ public class NewSuperPlayerM : MonoBehaviour
         Pull = Arm.GetComponent<PullObject>();
         rb.freezeRotation = true;
         readyToJump = true;
-        
+
+        animator = GetComponent<Animator>();
+        animator.SetBool("Idle", true); // Inicia la animación de idle
     }
 
     private void Update()
     {
-        //ground check
-       // grounded = Physics.Raycast(fix.transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
+        // Ground check
+        grounded = Physics.Raycast(fix.transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
 
-        RaycastTeST();    
         MyInput();
         SpeedControl();
 
-        //handle drag
-        if (grounded&&!ActiveGrapple)
+        // Handle drag
+        if (grounded && !ActiveGrapple)
             rb.drag = groundDrag;
         else
             rb.drag = 0;
 
-        if(Freeze)
+        if (Freeze)
         {
-            //moveSpeed = 0;
             rb.velocity = Vector3.zero;
         }
-
-        
-
     }
 
     private void FixedUpdate()
@@ -78,14 +72,13 @@ public class NewSuperPlayerM : MonoBehaviour
         MovePlayer();
     }
 
-
     private void MyInput()
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
-        //I say Jump
-        if(Input.GetKey(jumpKey)&&readyToJump&&grounded)
+        // Jump input
+        if (Input.GetKey(jumpKey) && readyToJump && grounded)
         {
             readyToJump = false;
             Jump();
@@ -99,7 +92,6 @@ public class NewSuperPlayerM : MonoBehaviour
         {
             enableMovementOnNextTouch = false;
             ResetRestrictions();
-
             Pull.GetComponent<PullObject>().StopGrapple();
         }
     }
@@ -113,16 +105,31 @@ public class NewSuperPlayerM : MonoBehaviour
     {
         if (ActiveGrapple) return;
 
-        //Dirección xd
+        // Dirección
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
-        //En el Suelo
-        if(grounded)
-        rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
-
-        //Aire
+        // En el suelo
+        if (grounded)
+        {
+            rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
+            if (moveDirection != Vector3.zero)
+            {
+                animator.SetBool("Idle", false); // Deja de reproducir la animación de idle
+                animator.SetBool("Walk", true); // Reproduce la animación de walk
+            }
+            else
+            {
+                animator.SetBool("Walk", false); // Deja de reproducir la animación de walk
+                animator.SetBool("Idle", true); // Reproduce la animación de idle
+            }
+        }
+        // En el aire
         else if (!grounded)
+        {
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+            animator.SetBool("Idle", false); // Deja de reproducir la animación de idle
+            animator.SetBool("Walk", false); // Deja de reproducir la animación de walk
+        }
     }
 
     private void SpeedControl()
@@ -131,8 +138,8 @@ public class NewSuperPlayerM : MonoBehaviour
 
         Vector3 flatvel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
-        //limit velocity if needed
-        if(flatvel.magnitude>moveSpeed)
+        // Limitar la velocidad si es necesario
+        if (flatvel.magnitude > moveSpeed)
         {
             Vector3 limitedVel = flatvel.normalized * moveSpeed;
             rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
@@ -143,22 +150,20 @@ public class NewSuperPlayerM : MonoBehaviour
     {
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+        animator.SetBool("Jump", true); // Reproduce la animación de jump
     }
 
     private void ResetJump()
     {
         readyToJump = true;
+        animator.SetBool("Jump", false); // Deja de reproducir la animación de jump
     }
-
 
     void RaycastTeST()
     {
-       
-        
         if (Physics.Raycast(fix.transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround))
         {
-            //Debug.Log("Le di");
-            grounded=true;
+            grounded = true;
             Debug.DrawRay(fix.transform.position, Vector3.down, Color.green);
         }
         else
@@ -173,10 +178,8 @@ public class NewSuperPlayerM : MonoBehaviour
     public void JumpToBitches(Vector3 targetPosition, float trajectoryHeight)
     {
         ActiveGrapple = true;
-
         velocityToSet = CalculateJumpVelocity(transform.position, targetPosition, trajectoryHeight);
-        Invoke(nameof(SetVelocity), 0.1f); //La Velocidad se aplica después de 0.1 segundos
-
+        Invoke(nameof(SetVelocity), 0.1f); // La velocidad se aplica después de 0.1 segundos
         Invoke(nameof(ResetRestrictions), 3f);
     }
 
@@ -201,3 +204,5 @@ public class NewSuperPlayerM : MonoBehaviour
         return velocityXZ + velocityY;
     }
 }
+
+
