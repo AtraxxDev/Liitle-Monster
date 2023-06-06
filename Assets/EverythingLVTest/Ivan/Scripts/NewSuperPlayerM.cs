@@ -46,14 +46,14 @@ public class NewSuperPlayerM : MonoBehaviour
         rb.freezeRotation = true;
         readyToJump = true;
 
-<<<<<<< Updated upstream
+
         animator = GetComponent<Animator>();
         animator.SetBool("Idle", true); // Inicia la animación de idle
-=======
-        Player = GameObject.FindGameObjectWithTag("ModelPlayer");
-        anim = Player.GetComponent<Animator>();
 
->>>>>>> Stashed changes
+       // Player = GameObject.FindGameObjectWithTag("ModelPlayer");
+        //anim = Player.GetComponent<Animator>();
+
+
     }
 
     private void Update()
@@ -74,15 +74,14 @@ public class NewSuperPlayerM : MonoBehaviour
         {
             rb.velocity = Vector3.zero;
         }
-<<<<<<< Updated upstream
-=======
+
 
         if(ActiveGrapple)
             anim.SetBool("Grappling", true);
         else
             anim.SetBool("Grappling", false);
 
-        if (rb.velocity!=Vector3.zero&&grounded)
+       /* if (rb.velocity!=Vector3.zero&&grounded)
         {
             anim.SetBool("IsWalking", true);
         }
@@ -95,16 +94,16 @@ public class NewSuperPlayerM : MonoBehaviour
         }
         else
             anim.SetBool("IsJumping", false);
+            */
 
 
 
 
 
 
->>>>>>> Stashed changes
     }
 
-   
+
 
     private void FixedUpdate()
     {
@@ -147,7 +146,7 @@ public class NewSuperPlayerM : MonoBehaviour
         // Dirección
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
-<<<<<<< Updated upstream
+
         // En el suelo
         if (grounded)
         {
@@ -170,23 +169,23 @@ public class NewSuperPlayerM : MonoBehaviour
             animator.SetBool("Idle", false); // Deja de reproducir la animación de idle
             animator.SetBool("Walk", false); // Deja de reproducir la animación de walk
         }
-=======
+
         //En el Suelo
-        if(grounded)
+        /*if(grounded)
         {
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
             anim.SetBool("IsMoving", true);
-        }
+        }*/
         
 
         //Aire
-        else if (!grounded)
+        /*else if (!grounded)
         {
             anim.SetBool("IsMoving", false);
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
-        }
+        }*/
             
->>>>>>> Stashed changes
+
     }
 
     private void SpeedControl()
@@ -207,11 +206,9 @@ public class NewSuperPlayerM : MonoBehaviour
     {
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
-<<<<<<< Updated upstream
+
         animator.SetBool("Jump", true); // Reproduce la animación de jump
-=======
-        
->>>>>>> Stashed changes
+
     }
 
     private void ResetJump()
