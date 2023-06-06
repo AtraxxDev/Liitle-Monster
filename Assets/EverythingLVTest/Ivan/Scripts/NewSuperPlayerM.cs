@@ -6,7 +6,6 @@ public class NewSuperPlayerM : MonoBehaviour
 {
     [Header("Movement")]
     public float moveSpeed;
-    public float normalSpeed;
     public float groundDrag;
 
     public float jumpForce;
@@ -46,7 +45,7 @@ public class NewSuperPlayerM : MonoBehaviour
         Pull = Arm.GetComponent<PullObject>();
         rb.freezeRotation = true;
         readyToJump = true;
-        normalSpeed = moveSpeed;
+        
     }
 
     private void Update()
@@ -55,9 +54,8 @@ public class NewSuperPlayerM : MonoBehaviour
        // grounded = Physics.Raycast(fix.transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
 
         RaycastTeST();    
-
-        SpeedControl();
         MyInput();
+        SpeedControl();
 
         //handle drag
         if (grounded&&!ActiveGrapple)
