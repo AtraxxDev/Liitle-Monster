@@ -35,15 +35,34 @@ namespace Keysystem
 
         public void PlayAnimation()
         {
-            if(_keyInventory.hasredKey) 
+
+            if (_keyInventory.hasredKey) 
             {
                 OpenDoor();
             }
 
-            /*else if (_keyInventory.hasBlueKey)
+            else if (_keyInventory.hasTutorialKey)
             {
                 OpenDoor();
-            }*/
+            }
+
+            else if (_keyInventory.hasBlueKey)
+            {
+                OpenDoor();
+            }
+
+
+            else if (_keyInventory.hasYellowKey)
+            {
+                OpenDoor();
+            }
+
+
+            else if (_keyInventory.hasGreenKey)
+            {
+                OpenDoor();
+            }
+
             else
             {
                 StartCoroutine(showDoorLocked());
