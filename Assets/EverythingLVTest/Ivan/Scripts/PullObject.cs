@@ -32,6 +32,9 @@ public class PullObject : MonoBehaviour
     private float grapplingCdTimer;
     [SerializeField] private float grappleDelayTime;
 
+    [Header("ListOfEffects")]
+    public ParticleSystem[] Effects;
+
     private void Awake()
     {
         lr = GetComponent<LineRenderer>();
@@ -86,6 +89,27 @@ public class PullObject : MonoBehaviour
         {
             Debug.Log("Yeah");
             StopGrapple();
+        }
+
+        if(other.gameObject.tag=="Meat")
+        {
+            Effects[0].Play();
+            Destroy(other.gameObject);
+        }
+        if(other.gameObject.tag=="Meat2")
+        {
+            Effects[1].Play();
+            Destroy(other.gameObject);
+        }
+        if (other.gameObject.tag == "Meat3")
+        {
+            Effects[2].Play();
+            Destroy(other.gameObject);
+        }
+        if (other.gameObject.tag == "Meat4")
+        {
+            Effects[3].Play();
+            Destroy(other.gameObject);
         }
     }
 

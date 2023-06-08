@@ -9,6 +9,10 @@ TagManager:
   - PullableObjects
   - Heavy
   - ModelPlayer
+  - Meat
+  - Meat2
+  - Meat3
+  - Meat4
   layers:
   - Default
   - TransparentFX

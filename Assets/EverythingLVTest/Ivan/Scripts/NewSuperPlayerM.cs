@@ -39,6 +39,8 @@ public class NewSuperPlayerM : MonoBehaviour
     public GameObject Player;
     public Animator anim;
 
+   
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
