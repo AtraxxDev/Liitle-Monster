@@ -7,6 +7,9 @@ public class PauseMenu : MonoBehaviour
     private bool wasCursorLocked = false;
     public GameObject PanelPause;
     public string nameScene;
+    public AudioSource music;
+    public AudioSource soundEffectOpen;
+    public AudioSource soundEffectClose;
 
     void Update()
     {
@@ -25,6 +28,8 @@ public class PauseMenu : MonoBehaviour
         {
             // Pausar el juego
             Time.timeScale = 0f;
+            music.Pause();
+            soundEffectOpen.Play();
             // Desbloquear el cursor del mouse
             wasCursorLocked = Cursor.lockState == CursorLockMode.Locked;
             Cursor.lockState = CursorLockMode.None;
@@ -36,6 +41,8 @@ public class PauseMenu : MonoBehaviour
         {
             // Reanudar el juego
             Time.timeScale = 1f;
+            music.Play();
+            soundEffectClose.Play();
             // Volver a bloquear el cursor del mouse si estaba bloqueado previamente
             if (wasCursorLocked)
             {

@@ -35,7 +35,7 @@ public class NoteController : MonoBehaviour
     void DisableNote()
     {
         noteCanvas.SetActive(false);
-        
+        openEvent.Invoke();
 
         isOpen = false;
     }
