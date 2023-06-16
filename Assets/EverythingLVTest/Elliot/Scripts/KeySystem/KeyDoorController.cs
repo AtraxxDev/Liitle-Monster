@@ -34,6 +34,7 @@ namespace Keysystem
 
         private IEnumerator PauseDoorInteraction()
         {
+            Debug.Log("Estoy en pausa");
             pauseInteraction = true;
             yield return new WaitForSeconds(waitTimer);
             pauseInteraction = false;
@@ -76,7 +77,7 @@ namespace Keysystem
             }
         }
 
-     
+   
 
         void OpenDoor()
         {

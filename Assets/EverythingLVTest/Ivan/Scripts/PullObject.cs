@@ -35,6 +35,8 @@ public class PullObject : MonoBehaviour
     [Header("ListOfEffects")]
     public ParticleSystem[] Effects;
 
+    public GameObject FinalText;
+    public GameObject Box;
     private void Awake()
     {
         lr = GetComponent<LineRenderer>();
@@ -110,10 +112,19 @@ public class PullObject : MonoBehaviour
         {
             Effects[3].Play();
             Destroy(other.gameObject);
+            StartCoroutine(FinalTextEnum());
         }
     }
 
-    
+    IEnumerator FinalTextEnum()
+    {
+        
+        FinalText.SetActive(true);
+        Box.SetActive(true);
+        yield return new WaitForSeconds(3.0f);
+        FinalText.SetActive(false);
+
+    }
 
     void StartGrapple()
     {

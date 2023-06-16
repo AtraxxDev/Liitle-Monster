@@ -8,4 +8,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TrueLittleMonster.unity
     guid: f75e39c0b5d7b5d459a9b97fad133e95
+  - enabled: 1
+    path: Assets/Scenes/Creditos.unity
+    guid: dbe81145d57d6b041b2c8f591d8d123b
+  - enabled: 1
+    path: Assets/Scenes/Menu.unity
+    guid: cb77682e399d32149b7a2eacc6337917
   m_configObjects: {}
